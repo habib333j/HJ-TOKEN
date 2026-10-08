@@ -1,1447 +1,704 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>HJ Token | Web3 Demo Project</title>
-
-    <!-- HJ Token Favicon -->
-    <link rel="icon" href="data:image/svg+xml,
-    <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'>
-    <circle cx='50' cy='50' r='46' fill='%2307111f' stroke='%2300d9ff' stroke-width='6'/>
-    <text x='50' y='62' text-anchor='middle' font-size='34'
-    font-family='Arial' font-weight='bold' fill='%2300d9ff'>HJ</text>
-    </svg>">
-
-    <style>
-
-        /* =========================
-           GLOBAL
-        ========================= */
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        body {
-            font-family: Arial, sans-serif;
-            background: #07111f;
-            color: white;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-
-        /* =========================
-           ANIMATED BACKGROUND
-        ========================= */
-
-        .bg-glow {
-            position: fixed;
-            width: 280px;
-            height: 280px;
-            border-radius: 50%;
-            filter: blur(90px);
-            opacity: 0.16;
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        .glow-one {
-            top: 10%;
-            left: 5%;
-            background: #00d9ff;
-            animation: moveGlowOne 8s ease-in-out infinite alternate;
-        }
-
-        .glow-two {
-            right: 5%;
-            bottom: 10%;
-            background: #0066ff;
-            animation: moveGlowTwo 10s ease-in-out infinite alternate;
-        }
-
-        @keyframes moveGlowOne {
-
-            from {
-                transform: translate(0, 0);
-            }
-
-            to {
-                transform: translate(120px, 80px);
-            }
-
-        }
-
-        @keyframes moveGlowTwo {
-
-            from {
-                transform: translate(0, 0);
-            }
-
-            to {
-                transform: translate(-100px, -70px);
-            }
-
-        }
-
-        header,
-        section,
-        footer {
-            position: relative;
-            z-index: 1;
-        }
-
-        /* =========================
-           HEADER
-        ========================= */
-
-        header {
-            padding: 22px 7%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid rgba(255,255,255,0.08);
-            background: rgba(7,17,31,0.75);
-            backdrop-filter: blur(12px);
-        }
-
-        .logo {
-            font-size: 26px;
-            font-weight: 800;
-            color: #00d9ff;
-            letter-spacing: 2px;
-            text-shadow: 0 0 15px rgba(0, 217, 255, 0.45);
-        }
-
-        nav {
-            display: flex;
-            align-items: center;
-        }
-
-        nav a {
-            position: relative;
-            color: white;
-            text-decoration: none;
-            margin-left: 25px;
-            transition: 0.3s;
-        }
-
-        nav a:hover {
-            color: #00d9ff;
-        }
-
-        nav a::after {
-            content: "";
-            position: absolute;
-            left: 0;
-            bottom: -7px;
-            width: 0;
-            height: 2px;
-            background: #00d9ff;
-            transition: 0.3s;
-        }
-
-        nav a:hover::after {
-            width: 100%;
-        }
-
-        /* =========================
-           WALLET BUTTON
-        ========================= */
-
-        .wallet-btn {
-            background: #00d9ff;
-            color: #001018;
-            border: none;
-            padding: 11px 18px;
-            border-radius: 8px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.3s;
-            margin-left: 25px;
-        }
-
-        .wallet-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0,217,255,0.25);
-        }
-
-        /* =========================
-           HERO
-        ========================= */
-
-        .hero {
-            min-height: 75vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 60px 20px;
-        }
-
-        .hero h1 {
-            font-size: 60px;
-            margin-bottom: 20px;
-        }
-
-        .hero h1 span {
-            color: #00d9ff;
-        }
-
-        .hero p {
-            max-width: 650px;
-            margin: auto;
-            color: #aeb9c8;
-            font-size: 18px;
-            line-height: 1.7;
-        }
-
-        /* =========================
-           HJ COIN
-        ========================= */
-
-        .coin {
-            width: 120px;
-            height: 120px;
-            margin: 0 auto 30px;
-            border-radius: 50%;
-            border: 4px solid #00d9ff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: radial-gradient(circle, #102d45, #07111f);
-            box-shadow:
-                0 0 25px rgba(0,217,255,0.35),
-                inset 0 0 25px rgba(0,217,255,0.12);
-            animation: coinFloat 3s ease-in-out infinite;
-        }
-
-        .coin-inner {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            border: 2px solid rgba(0,217,255,0.6);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 30px;
-            font-weight: bold;
-            color: #00d9ff;
-        }
-
-        @keyframes coinFloat {
-
-            0%, 100% {
-                transform: translateY(0);
-            }
-
-            50% {
-                transform: translateY(-10px);
-            }
-
-        }
-
-        /* =========================
-           BUTTONS
-        ========================= */
-
-        .buttons {
-            margin-top: 30px;
-        }
-
-        button {
-            padding: 14px 25px;
-            border: none;
-            border-radius: 8px;
-            margin: 6px;
-            cursor: pointer;
-            font-size: 15px;
-            font-weight: bold;
-        }
-
-        .primary {
-            background: #00d9ff;
-            color: #001018;
-        }
-
-        .secondary {
-            background: transparent;
-            color: white;
-            border: 1px solid #00d9ff;
-        }
-
-        /* =========================
-           ACTION SECTION
-        ========================= */
-
-        .action-section {
-            padding: 70px 20px;
-            text-align: center;
-        }
-
-        .action-content {
-            max-width: 850px;
-            margin: auto;
-            padding: 55px 30px;
-            background: rgba(13,27,45,0.75);
-            border: 1px solid rgba(0,217,255,0.18);
-            border-radius: 24px;
-            box-shadow: 0 20px 70px rgba(0,0,0,0.25);
-        }
-
-        .badge {
-            display: inline-block;
-            padding: 7px 14px;
-            border: 1px solid rgba(0,217,255,0.4);
-            border-radius: 50px;
-            color: #00d9ff;
-            font-size: 12px;
-            font-weight: bold;
-            letter-spacing: 1.5px;
-            margin-bottom: 20px;
-        }
-
-        .action-content h2 {
-            font-size: 42px;
-            margin-bottom: 18px;
-        }
-
-        .action-content h2 span {
-            color: #00d9ff;
-        }
-
-        .action-content p {
-            max-width: 650px;
-            margin: auto;
-            color: #8d9aaa;
-            line-height: 1.7;
-        }
-
-        .action-buttons {
-            margin-top: 30px;
-        }
-
-        .action-buttons a {
-            display: inline-block;
-            text-decoration: none;
-            padding: 13px 22px;
-            border-radius: 9px;
-            margin: 6px;
-            font-weight: bold;
-            transition: 0.3s;
-        }
-
-        .action-primary {
-            background: #00d9ff;
-            color: #001018;
-        }
-
-        .action-secondary {
-            border: 1px solid #00d9ff;
-            color: white;
-        }
-
-        .action-buttons a:hover {
-            transform: translateY(-3px);
-        }
-
-        /* =========================
-           STATS
-        ========================= */
-
-        .stats {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            flex-wrap: wrap;
-            padding: 20px;
-        }
-
-        .card {
-            width: 220px;
-            padding: 25px;
-            background: #0d1b2d;
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 14px;
-            text-align: center;
-        }
-
-        .card h2 {
-            color: #00d9ff;
-            margin-bottom: 8px;
-        }
-
-        /* =========================
-           TOKENOMICS
-        ========================= */
-
-        .tokenomics,
-        .roadmap {
-            padding: 80px 7%;
-            text-align: center;
-        }
-
-        .tokenomics h2,
-        .roadmap h2 {
-            font-size: 38px;
-            margin-bottom: 10px;
-        }
-
-        .section-text {
-            color: #8d9aaa;
-            margin-bottom: 40px;
-        }
-
-        .token-grid,
-        .roadmap-grid {
-            display: grid;
-            grid-template-columns: repeat(4,1fr);
-            gap: 20px;
-            max-width: 1100px;
-            margin: auto;
-        }
-
-        .token-card,
-        .road-card {
-            background: #0d1b2d;
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 16px;
-            padding: 30px 20px;
-            transition: 0.3s;
-        }
-
-        .token-card:hover,
-        .road-card:hover {
-            transform: translateY(-6px);
-            border-color: rgba(0,217,255,0.35);
-        }
-
-        .token-card h3,
-        .road-card h3 {
-            margin-bottom: 15px;
-        }
-
-        .token-card strong {
-            display: block;
-            color: #00d9ff;
-            font-size: 32px;
-            margin-bottom: 12px;
-        }
-
-        .token-card p,
-        .road-card p {
-            color: #8d9aaa;
-            line-height: 1.6;
-        }
-
-        /* =========================
-           ROADMAP
-        ========================= */
-
-        .roadmap {
-            background: rgba(9,22,37,0.75);
-        }
-
-        .road-card span {
-            display: inline-flex;
-            width: 45px;
-            height: 45px;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            background: #00d9ff;
-            color: #001018;
-            font-weight: bold;
-            margin-bottom: 18px;
-        }
-
-        /* =========================
-           TOKEN INFO
-        ========================= */
-
-        .token-info {
-            padding: 80px 7%;
-            text-align: center;
-        }
-
-        .token-info h2 {
-            font-size: 38px;
-            margin-bottom: 10px;
-        }
-
-        .info-box {
-            max-width: 800px;
-            margin: 40px auto 0;
-            background: #0d1b2d;
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 16px;
-            overflow: hidden;
-        }
-
-        .info-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 20px;
-            padding: 20px 25px;
-            border-bottom: 1px solid rgba(255,255,255,0.07);
-            text-align: left;
-        }
-
-        .info-row:last-child {
-            border-bottom: none;
-        }
-
-        .info-row span {
-            color: #8d9aaa;
-        }
-
-        .info-row strong {
-            color: white;
-        }
-
-        .info-row code {
-            color: #00d9ff;
-            margin-right: 10px;
-        }
-
-        .info-row button {
-            background: #00d9ff;
-            color: #001018;
-            padding: 8px 13px;
-            margin: 0;
-        }
-
-        /* =========================
-           FAQ
-        ========================= */
-
-        .faq-section {
-            padding: 80px 7%;
-            text-align: center;
-            background: rgba(9,22,37,0.75);
-        }
-
-        .faq-section h2 {
-            font-size: 38px;
-            margin-bottom: 10px;
-        }
-
-        .faq-container {
-            max-width: 800px;
-            margin: 40px auto 0;
-            text-align: left;
-        }
-
-        .faq-item {
-            margin-bottom: 12px;
-            background: #0d1b2d;
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 12px;
-            overflow: hidden;
-        }
-
-        .faq-item button {
-            width: 100%;
-            margin: 0;
-            padding: 20px;
-            background: transparent;
-            color: white;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            text-align: left;
-            font-size: 16px;
-        }
-
-        .faq-item button span {
-            color: #00d9ff;
-            font-size: 24px;
-        }
-
-        .faq-answer {
-            display: none;
-            padding: 0 20px 20px;
-            color: #8d9aaa;
-            line-height: 1.7;
-        }
-
-        .faq-item.active .faq-answer {
-            display: block;
-        }
-
-        /* =========================
-           PREMIUM FOOTER
-        ========================= */
-
-        .premium-footer {
-            background: #050c16;
-            padding: 70px 7% 25px;
-            border-top: 1px solid rgba(255,255,255,0.08);
-        }
-
-        .footer-content {
-            max-width: 1100px;
-            margin: auto;
-            display: grid;
-            grid-template-columns: 2fr 1fr 1fr;
-            gap: 50px;
-        }
-
-        .footer-logo {
-            font-size: 25px;
-            font-weight: 800;
-            letter-spacing: 2px;
-            color: #00d9ff;
-            margin-bottom: 15px;
-        }
-
-        .footer-brand p {
-            max-width: 350px;
-            color: #718096;
-            line-height: 1.7;
-        }
-
-        .footer-links {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .footer-links h3 {
-            margin-bottom: 8px;
-        }
-
-        .footer-links a {
-            color: #8d9aaa;
-            text-decoration: none;
-            transition: 0.3s;
-        }
-
-        .footer-links a:hover {
-            color: #00d9ff;
-            transform: translateX(4px);
-        }
-
-        .footer-bottom {
-            max-width: 1100px;
-            margin: 50px auto 0;
-            padding-top: 20px;
-            border-top: 1px solid rgba(255,255,255,0.07);
-            display: flex;
-            justify-content: space-between;
-            gap: 20px;
-            color: #5f6c7d;
-            font-size: 13px;
-        }
-
-        /* =========================
-           RESPONSIVE
-        ========================= */
-
-        @media (max-width: 900px) {
-
-            .token-grid,
-            .roadmap-grid {
-                grid-template-columns: repeat(2,1fr);
-            }
-
-        }
-
-        @media (max-width: 700px) {
-
-            header {
-                padding: 18px 5%;
-            }
-
-            nav {
-                display: none;
-            }
-
-            .wallet-btn {
-                margin-left: 10px;
-                padding: 9px 13px;
-            }
-
-            .hero {
-                padding-top: 40px;
-            }
-
-            .hero h1 {
-                font-size: 42px;
-            }
-
-            .action-content h2 {
-                font-size: 32px;
-            }
-
-            .footer-content {
-                grid-template-columns: 1fr;
-                gap: 35px;
-            }
-
-            .footer-bottom {
-                flex-direction: column;
-            }
-
-        }
-
-        @media (max-width: 600px) {
-
-            .token-grid,
-            .roadmap-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .info-row {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-
-            .info-row.contract div {
-                width: 100%;
-                word-break: break-all;
-            }
-
-        }
-
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>HJ TOKEN | Premium Web3 Demo</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    scroll-behavior:smooth;
+}
+
+body{
+    font-family:Arial,Helvetica,sans-serif;
+    background:#06101d;
+    color:#fff;
+    line-height:1.6;
+    overflow-x:hidden;
+}
+
+body:before,
+body:after{
+    content:"";
+    position:fixed;
+    width:350px;
+    height:350px;
+    border-radius:50%;
+    filter:blur(100px);
+    opacity:.18;
+    z-index:-1;
+}
+
+body:before{
+    background:#00d9ff;
+    top:-120px;
+    left:-100px;
+}
+
+body:after{
+    background:#7c3aed;
+    right:-120px;
+    bottom:-100px;
+}
+
+header{
+    position:sticky;
+    top:0;
+    z-index:1000;
+    background:rgba(5,14,27,.88);
+    backdrop-filter:blur(15px);
+    border-bottom:1px solid rgba(255,255,255,.08);
+}
+
+.nav{
+    max-width:1150px;
+    margin:auto;
+    padding:17px 20px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+}
+
+.logo{
+    font-size:22px;
+    font-weight:900;
+    color:#00d9ff;
+    letter-spacing:1px;
+}
+
+nav a{
+    color:#cbd5e1;
+    text-decoration:none;
+    margin:0 10px;
+    font-size:14px;
+}
+
+nav a:hover{
+    color:#00d9ff;
+}
+
+.btn{
+    border:0;
+    cursor:pointer;
+    padding:12px 19px;
+    border-radius:10px;
+    font-weight:bold;
+    color:#001018;
+    background:#00d9ff;
+    box-shadow:0 0 25px rgba(0,217,255,.22);
+}
+
+.btn:hover{
+    transform:translateY(-2px);
+}
+
+.container{
+    max-width:1150px;
+    margin:auto;
+    padding:0 20px;
+}
+
+.hero{
+    min-height:620px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:70px 20px;
+}
+
+.coin{
+    width:100px;
+    height:100px;
+    margin:auto;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:35px;
+    font-weight:900;
+    color:#001018;
+    background:linear-gradient(135deg,#00d9ff,#75f1ff);
+    box-shadow:0 0 55px rgba(0,217,255,.35);
+}
+
+.badge{
+    display:inline-block;
+    margin-top:25px;
+    padding:7px 13px;
+    border:1px solid rgba(0,217,255,.3);
+    border-radius:30px;
+    color:#00d9ff;
+    background:rgba(0,217,255,.07);
+    font-size:13px;
+}
+
+.hero h1{
+    font-size:clamp(42px,7vw,76px);
+    margin:18px 0 10px;
+}
+
+.hero h1 span{
+    color:#00d9ff;
+}
+
+.hero p{
+    max-width:700px;
+    margin:auto;
+    color:#aab8c9;
+    font-size:17px;
+}
+
+.actions{
+    margin-top:30px;
+    display:flex;
+    justify-content:center;
+    gap:12px;
+    flex-wrap:wrap;
+}
+
+.btn.secondary{
+    color:#fff;
+    background:rgba(255,255,255,.07);
+    border:1px solid rgba(255,255,255,.12);
+    box-shadow:none;
+}
+
+section{
+    padding:75px 0;
+}
+
+.title{
+    text-align:center;
+    margin-bottom:40px;
+}
+
+.title h2{
+    font-size:35px;
+}
+
+.title p{
+    color:#91a1b5;
+    margin-top:8px;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:18px;
+}
+
+.card{
+    background:rgba(255,255,255,.045);
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:18px;
+    padding:25px;
+    transition:.25s;
+}
+
+.card:hover{
+    transform:translateY(-5px);
+    border-color:rgba(0,217,255,.35);
+}
+
+.stat h3{
+    color:#00d9ff;
+    font-size:27px;
+}
+
+.stat p{
+    color:#9eacbc;
+}
+
+.dashboard{
+    display:grid;
+    grid-template-columns:1.3fr .7fr;
+    gap:20px;
+}
+
+.balance{
+    font-size:38px;
+    font-weight:900;
+    margin:8px 0;
+}
+
+.muted{
+    color:#94a3b8;
+}
+
+.progress{
+    height:10px;
+    background:#162335;
+    border-radius:20px;
+    overflow:hidden;
+    margin-top:15px;
+}
+
+.progress div{
+    height:100%;
+    width:40%;
+    background:#00d9ff;
+}
+
+.token-row{
+    display:flex;
+    justify-content:space-between;
+    padding:13px 0;
+    border-bottom:1px solid rgba(255,255,255,.07);
+}
+
+.token-row:last-child{
+    border-bottom:0;
+}
+
+.token-row span:last-child{
+    color:#00d9ff;
+    font-weight:bold;
+}
+
+.roadmap{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:18px;
+}
+
+.phase{
+    position:relative;
+}
+
+.phase small{
+    color:#00d9ff;
+    font-weight:bold;
+}
+
+.phase h3{
+    margin:8px 0;
+}
+
+.phase p{
+    color:#91a1b5;
+    font-size:14px;
+}
+
+.faq{
+    max-width:800px;
+    margin:auto;
+}
+
+.faq-item{
+    margin-bottom:12px;
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:12px;
+    overflow:hidden;
+    background:rgba(255,255,255,.035);
+}
+
+.question{
+    padding:17px 20px;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+.answer{
+    display:none;
+    padding:0 20px 18px;
+    color:#9eacbc;
+}
+
+.answer.show{
+    display:block;
+}
+
+footer{
+    border-top:1px solid rgba(255,255,255,.08);
+    padding:35px 20px;
+    text-align:center;
+    color:#8190a3;
+}
+
+.notice{
+    margin:25px auto 0;
+    max-width:800px;
+    padding:13px 17px;
+    border:1px solid rgba(0,217,255,.2);
+    border-radius:12px;
+    background:rgba(0,217,255,.05);
+    color:#9fb2c5;
+    font-size:13px;
+}
+
+.toast{
+    position:fixed;
+    left:50%;
+    bottom:25px;
+    transform:translateX(-50%) translateY(100px);
+    background:#0d1a2b;
+    border:1px solid rgba(0,217,255,.3);
+    padding:13px 20px;
+    border-radius:10px;
+    transition:.3s;
+    z-index:2000;
+}
+
+.toast.show{
+    transform:translateX(-50%) translateY(0);
+}
+
+@media(max-width:850px){
+    nav{
+        display:none;
+    }
+
+    .grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .dashboard{
+        grid-template-columns:1fr;
+    }
+
+    .roadmap{
+        grid-template-columns:repeat(2,1fr);
+    }
+}
+
+@media(max-width:550px){
+    .grid,
+    .roadmap{
+        grid-template-columns:1fr;
+    }
+
+    .hero{
+        min-height:560px;
+    }
+
+    .hero h1{
+        font-size:43px;
+    }
+
+    section{
+        padding:55px 0;
+    }
+}
+</style>
 </head>
-
 
 <body>
 
-    <!-- Animated Background -->
-    <div class="bg-glow glow-one"></div>
-    <div class="bg-glow glow-two"></div>
+<header>
+<div class="nav">
+    <div class="logo">⚡ HJ TOKEN</div>
 
+    <nav>
+        <a href="#home">Home</a>
+        <a href="#dashboard">Dashboard</a>
+        <a href="#token">Token</a>
+        <a href="#tokenomics">Tokenomics</a>
+        <a href="#roadmap">Roadmap</a>
+        <a href="#faq">FAQ</a>
+    </nav>
 
-    <!-- =========================
-         HEADER
-    ========================= -->
+    <button class="btn" onclick="connectWallet()">Connect</button>
+</div>
+</header>
 
-    <header>
+<main>
 
-        <div class="logo">
-            HJ TOKEN
-        </div>
+<section class="hero" id="home">
+<div>
+    <div class="coin">HJ</div>
 
-        <nav>
-            <a href="#">Home</a>
-            <a href="#token">Token</a>
-            <a href="#tokenomics">Tokenomics</a>
-            <a href="#roadmap">Roadmap</a>
-            <a href="#info">Info</a>
-            <a href="#faq">FAQ</a>
-        </nav>
+    <div class="badge">DEMO • TESTNET PROJECT</div>
 
-        <button class="wallet-btn" onclick="connectWallet()">
-            Connect Wallet
+    <h1>Welcome to <span>HJ TOKEN</span></h1>
+
+    <p>
+        A modern Web3 community token concept built for learning,
+        experimentation and future ecosystem development.
+    </p>
+
+    <div class="actions">
+        <button class="btn" onclick="document.getElementById('dashboard').scrollIntoView()">
+            Explore Dashboard
         </button>
 
-    </header>
+        <button class="btn secondary" onclick="showToast('Demo contract is not live yet.')">
+            View Contract
+        </button>
+    </div>
+
+    <div class="notice">
+        ⚠️ HJ TOKEN is currently a demo/testnet project.
+        No real-money investment or live contract is available on this website.
+    </div>
+</div>
+</section>
+
 
+<section id="dashboard">
+<div class="container">
+
+<div class="title">
+    <h2>Premium Dashboard</h2>
+    <p>Demo wallet and token statistics</p>
+</div>
 
-    <!-- =========================
-         HERO
-    ========================= -->
-
-    <section class="hero">
-
-        <div>
-
-            <div class="coin">
-                <div class="coin-inner">
-                    HJ
-                </div>
-            </div>
-
-            <h1>
-                Welcome to <span>HJ Token</span>
-            </h1>
-
-            <p>
-                A community-focused demo token project built for
-                learning, experimentation and Web3 development.
-            </p>
-
-            <div class="buttons">
-
-                <button class="primary" onclick="showMessage()">
-                    Explore Token
-                </button>
-
-                <button class="secondary" onclick="showContractMessage()">
-                    View Contract
-                </button>
-
-            </div>
-
-        </div>
-
-    </section>
-
-
-    <!-- =========================
-         TOKEN ACTION
-    ========================= -->
-
-    <section class="action-section">
-
-        <div class="action-content">
-
-            <span class="badge">
-                HJT ECOSYSTEM
-            </span>
-
-            <h2>
-                Build With <span>HJ Token</span>
-            </h2>
-
-            <p>
-                Explore the HJ Token ecosystem, roadmap and community.
-                This website is currently a demo project.
-            </p>
-
-            <div class="action-buttons">
-
-                <a href="#tokenomics" class="action-primary">
-                    Explore Token
-                </a>
-
-                <a href="#info" class="action-secondary">
-                    Token Info
-                </a>
-
-            </div>
-
-        </div>
-
-    </section>
-
-
-    <!-- =========================
-         TOKEN STATS
-    ========================= -->
-
-    <section class="stats" id="token">
-
-        <div class="card">
-
-            <h2>
-                1M
-            </h2>
-
-            <p>
-                Total Supply
-            </p>
-
-        </div>
-
-
-        <div class="card">
-
-            <h2>
-                HJT
-            </h2>
-
-            <p>
-                Token Symbol
-            </p>
-
-        </div>
-
-
-        <div class="card">
-
-            <h2>
-                TESTNET
-            </h2>
-
-            <p>
-                Network
-            </p>
-
-        </div>
-
-    </section>
-
-
-    <!-- =========================
-         TOKENOMICS
-    ========================= -->
-
-    <section class="tokenomics" id="tokenomics">
-
-        <h2>
-            Tokenomics
-        </h2>
-
-        <p class="section-text">
-            HJ Token demo supply distribution
-        </p>
-
-
-        <div class="token-grid">
-
-            <div class="token-card">
-
-                <h3>
-                    Community
-                </h3>
-
-                <strong>
-                    40%
-                </strong>
-
-                <p>
-                    Community rewards & ecosystem
-                </p>
-
-            </div>
-
-
-            <div class="token-card">
-
-                <h3>
-                    Development
-                </h3>
-
-                <strong>
-                    25%
-                </strong>
-
-                <p>
-                    Website & project development
-                </p>
-
-            </div>
-
-
-            <div class="token-card">
-
-                <h3>
-                    Marketing
-                </h3>
-
-                <strong>
-                    20%
-                </strong>
-
-                <p>
-                    Community growth & promotion
-                </p>
-
-            </div>
-
-
-            <div class="token-card">
-
-                <h3>
-                    Reserve
-                </h3>
-
-                <strong>
-                    15%
-                </strong>
-
-                <p>
-                    Future project requirements
-                </p>
-
-            </div>
-
-        </div>
-
-    </section>
-
-
-    <!-- =========================
-         ROADMAP
-    ========================= -->
-
-    <section class="roadmap" id="roadmap">
-
-        <h2>
-            Roadmap
-        </h2>
-
-        <p class="section-text">
-            Our demo project development plan
-        </p>
-
-
-        <div class="roadmap-grid">
-
-            <div class="road-card">
-
-                <span>
-                    01
-                </span>
-
-                <h3>
-                    Project Launch
-                </h3>
-
-                <p>
-                    Project concept and website development.
-                </p>
-
-            </div>
-
-
-            <div class="road-card">
-
-                <span>
-                    02
-                </span>
-
-                <h3>
-                    Testnet
-                </h3>
-
-                <p>
-                    Smart contract testing and community testing.
-                </p>
-
-            </div>
-
-
-            <div class="road-card">
-
-                <span>
-                    03
-                </span>
-
-                <h3>
-                    Community
-                </h3>
-
-                <p>
-                    Build an active community around the project.
-                </p>
-
-            </div>
-
-
-            <div class="road-card">
-
-                <span>
-                    04
-                </span>
-
-                <h3>
-                    Mainnet
-                </h3>
-
-                <p>
-                    Future mainnet planning after proper testing.
-                </p>
-
-            </div>
-
-        </div>
-
-    </section>
-
-
-    <!-- =========================
-         TOKEN INFORMATION
-    ========================= -->
-
-    <section class="token-info" id="info">
-
-        <h2>
-            Token Information
-        </h2>
-
-        <p class="section-text">
-            Official HJ Token demo information
-        </p>
-
-
-        <div class="info-box">
-
-            <div class="info-row">
-
-                <span>
-                    Token Name
-                </span>
-
-                <strong>
-                    HJ Token
-                </strong>
-
-            </div>
-
-
-            <div class="info-row">
-
-                <span>
-                    Symbol
-                </span>
-
-                <strong>
-                    HJT
-                </strong>
-
-            </div>
-
-
-            <div class="info-row">
-
-                <span>
-                    Total Supply
-                </span>
-
-                <strong>
-                    1,000,000 HJT
-                </strong>
-
-            </div>
-
-
-            <div class="info-row">
-
-                <span>
-                    Network
-                </span>
-
-                <strong>
-                    BNB Testnet
-                </strong>
-
-            </div>
-
-
-            <div class="info-row contract">
-
-                <span>
-                    Contract Address
-                </span>
-
-                <div>
-
-                    <code id="contract">
-                        DEMO-CONTRACT-NOT-LIVE
-                    </code>
-
-                    <button onclick="copyContract()">
-                        Copy
-                    </button>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </section>
-
-
-    <!-- =========================
-         FAQ
-    ========================= -->
-
-    <section class="faq-section" id="faq">
-
-        <h2>
-            Frequently Asked Questions
-        </h2>
-
-        <p class="section-text">
-            Common questions about HJ Token
-        </p>
-
-
-        <div class="faq-container">
-
-
-            <div class="faq-item">
-
-                <button onclick="toggleFaq(this)">
-
-                    What is HJ Token?
-
-                    <span>
-                        +
-                    </span>
-
-                </button>
-
-                <div class="faq-answer">
-
-                    HJ Token is currently a demo project created
-                    for learning and Web3 development.
-
-                </div>
-
-            </div>
-
-
-            <div class="faq-item">
-
-                <button onclick="toggleFaq(this)">
-
-                    What is the total supply?
-
-                    <span>
-                        +
-                    </span>
-
-                </button>
-
-                <div class="faq-answer">
-
-                    The planned demo supply is 1,000,000 HJT.
-
-                </div>
-
-            </div>
-
-
-            <div class="faq-item">
-
-                <button onclick="toggleFaq(this)">
-
-                    Is HJ Token live?
-
-                    <span>
-                        +
-                    </span>
-
-                </button>
-
-                <div class="faq-answer">
-
-                    No. This website currently represents
-                    a test/demo project.
-
-                </div>
-
-            </div>
-
-
-            <div class="faq-item">
-
-                <button onclick="toggleFaq(this)">
-
-                    Can I connect my wallet?
-
-                    <span>
-                        +
-                    </span>
-
-                </button>
-
-                <div class="faq-answer">
-
-                    The wallet button is currently a demo interface
-                    and does not connect to a real wallet.
-
-                </div>
-
-            </div>
-
-
-        </div>
-
-    </section>
-
-
-    <!-- =========================
-         FOOTER
-    ========================= -->
-
-    <footer class="premium-footer">
-
-        <div class="footer-content">
-
-
-            <div class="footer-brand">
-
-                <div class="footer-logo">
-                    HJ TOKEN
-                </div>
-
-                <p>
-                    A community-focused Web3 demo project
-                    created for learning and experimentation.
-                </p>
-
-            </div>
-
-
-            <div class="footer-links">
-
-                <h3>
-                    Explore
-                </h3>
-
-                <a href="#">
-                    Home
-                </a>
-
-                <a href="#token">
-                    Token
-                </a>
-
-                <a href="#tokenomics">
-                    Tokenomics
-                </a>
-
-                <a href="#roadmap">
-                    Roadmap
-                </a>
-
-                <a href="#faq">
-                    FAQ
-                </a>
-
-            </div>
-
-
-            <div class="footer-links">
-
-                <h3>
-                    Community
-                </h3>
-
-                <a href="#" onclick="demoSocial('Telegram')">
-                    Telegram
-                </a>
-
-                <a href="#" onclick="demoSocial('Facebook')">
-                    Facebook
-                </a>
-
-                <a href="#" onclick="demoSocial('X')">
-                    X / Twitter
-                </a>
-
-            </div>
-
-
-        </div>
-
-
-        <div class="footer-bottom">
-
-            <p>
-                © 2026 HJ Token. Demo project only.
-            </p>
-
-            <p>
-                Built for Web3 learning.
-            </p>
-
-        </div>
-
-    </footer>
-
-
-    <!-- =========================
-         JAVASCRIPT
-    ========================= -->
-
-    <script>
-
-        function showMessage() {
-
-            alert(
-                "HJ Token Demo\n\n" +
-                "This is a test/demo project."
-            );
-
-        }
-
-
-        function connectWallet() {
-
-            alert(
-                "Wallet Connect Demo\n\n" +
-                "No real wallet connection is active."
-            );
-
-        }
-
-
-        function showContractMessage() {
-
-            alert(
-                "Contract Address\n\n" +
-                "DEMO-CONTRACT-NOT-LIVE"
-            );
-
-        }
-
-
-        function copyContract() {
-
-            const contract =
-                document.getElementById("contract").innerText;
-
-            navigator.clipboard.writeText(contract)
-                .then(function() {
-
-                    alert(
-                        "Demo contract address copied!"
-                    );
-
-                })
-                .catch(function() {
-
-                    alert(
-                        "Copy is not available in this browser."
-                    );
-
-                });
-
-        }
-
-
-        function toggleFaq(button) {
-
-            const item =
-                button.parentElement;
-
-            item.classList.toggle("active");
-
-            const icon =
-                button.querySelector("span");
-
-            if (item.classList.contains("active")) {
-
-                icon.textContent = "−";
-
-            } else {
-
-                icon.textContent = "+";
-
-            }
-
-        }
-
-
-        function demoSocial(platform) {
-
-            alert(
-                platform +
-                " community link is coming soon."
-            );
-
-        }
-
-    </script>
+<div class="dashboard">
+
+<div class="card">
+    <div class="muted">Demo Balance</div>
+    <div class="balance">10,000 HJT</div>
+    <div class="muted">Demo Wallet Connected</div>
+
+    <div class="progress">
+        <div></div>
+    </div>
+
+    <br>
+
+    <button class="btn" onclick="showToast('Demo transaction only — no real transfer was made.')">
+        Demo Transfer
+    </button>
+</div>
+
+<div class="card">
+    <div class="token-row">
+        <span>Total Supply</span>
+        <span>1M HJT</span>
+    </div>
+
+    <div class="token-row">
+        <span>Symbol</span>
+        <span>HJT</span>
+    </div>
+
+    <div class="token-row">
+        <span>Network</span>
+        <span>TESTNET</span>
+    </div>
+
+    <div class="token-row">
+        <span>Status</span>
+        <span>DEMO</span>
+    </div>
+</div>
+
+</div>
+</div>
+</section>
+
+
+<section id="token">
+<div class="container">
+
+<div class="title">
+    <h2>Token Information</h2>
+    <p>Basic HJ Token details</p>
+</div>
+
+<div class="grid">
+
+<div class="card stat">
+    <div class="muted">Token Name</div>
+    <h3>HJ Token</h3>
+</div>
+
+<div class="card stat">
+    <div class="muted">Symbol</div>
+    <h3>HJT</h3>
+</div>
+
+<div class="card stat">
+    <div class="muted">Total Supply</div>
+    <h3>1,000,000</h3>
+</div>
+
+<div class="card stat">
+    <div class="muted">Network</div>
+    <h3>BNB Testnet</h3>
+</div>
+
+</div>
+
+<div class="card" style="margin-top:20px">
+    <div class="muted">Contract Address</div>
+    <div style="margin-top:8px;font-weight:bold">
+        DEMO-CONTRACT-NOT-LIVE
+    </div>
+</div>
+
+</div>
+</section>
+
+
+<section id="tokenomics">
+<div class="container">
+
+<div class="title">
+    <h2>Tokenomics</h2>
+    <p>Demo allocation of the total supply</p>
+</div>
+
+<div class="grid">
+
+<div class="card">
+    <h3>40%</h3>
+    <h4>Community</h4>
+    <p class="muted">Community ecosystem and future activities.</p>
+</div>
+
+<div class="card">
+    <h3>25%</h3>
+    <h4>Development</h4>
+    <p class="muted">Product, website and ecosystem development.</p>
+</div>
+
+<div class="card">
+    <h3>20%</h3>
+    <h4>Marketing</h4>
+    <p class="muted">Future promotional and community campaigns.</p>
+</div>
+
+<div class="card">
+    <h3>15%</h3>
+    <h4>Reserve</h4>
+    <p class="muted">Future ecosystem requirements.</p>
+</div>
+
+</div>
+</div>
+</section>
+
+
+<section id="roadmap">
+<div class="container">
+
+<div class="title">
+    <h2>Roadmap</h2>
+    <p>Demo project development plan</p>
+</div>
+
+<div class="roadmap">
+
+<div class="card phase">
+    <small>PHASE 01</small>
+    <h3>Project Launch</h3>
+    <p>Build the initial website and project identity.</p>
+</div>
+
+<div class="card phase">
+    <small>PHASE 02</small>
+    <h3>Testnet</h3>
+    <p>Experiment with blockchain concepts in a test environment.</p>
+</div>
+
+<div class="card phase">
+    <small>PHASE 03</small>
+    <h3>Community</h3>
+    <p>Develop community ideas and useful ecosystem features.</p>
+</div>
+
+<div class="card phase">
+    <small>PHASE 04</small>
+    <h3>Future</h3>
+    <p>Evaluate future development based on security and legality.</p>
+</div>
+
+</div>
+</div>
+</section>
+
+
+<section id="faq">
+<div class="container">
+
+<div class="title">
+    <h2>FAQ</h2>
+    <p>Frequently asked questions</p>
+</div>
+
+<div class="faq">
+
+<div class="faq-item">
+    <div class="question" onclick="toggleFaq(this)">
+        What is HJ Token?
+    </div>
+    <div class="answer">
+        HJ Token is currently a demo/testnet token project created for learning and experimentation.
+    </div>
+</div>
+
+<div class="faq-item">
+    <div class="question" onclick="toggleFaq(this)">
+        Is HJ Token live?
+    </div>
+    <div class="answer">
+        No. The website currently uses a demo contract placeholder and does not represent a live token.
+    </div>
+</div>
+
+<div class="faq-item">
+    <div class="question" onclick="toggleFaq(this)">
+        Can I connect my real wallet?
+    </div>
+    <div class="answer">
+        The Connect button on this version is only a demo interaction. It does not request access to a real wallet.
+    </div>
+</div>
+
+<div class="faq-item">
+    <div class="question" onclick="toggleFaq(this)">
+        What is the total supply?
+    </div>
+    <div class="answer">
+        The planned demo token supply shown on this website is 1,000,000 HJT.
+    </div>
+</div>
+
+</div>
+</div>
+</section>
+
+</main>
+
+
+<footer>
+    <strong>HJ TOKEN</strong>
+    <p>Premium Web3 Demo Project</p>
+    <p>© 2026 HJ TOKEN • Demo/Testnet Only</p>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+
+<script>
+
+function showToast(message){
+    const toast=document.getElementById("toast");
+
+    toast.textContent=message;
+    toast.classList.add("show");
+
+    setTimeout(()=>{
+        toast.classList.remove("show");
+    },2500);
+}
+
+function connectWallet(){
+    showToast("Demo Wallet Connected — No real wallet access.");
+}
+
+function toggleFaq(element){
+    const answer=element.nextElementSibling;
+    answer.classList.toggle("show");
+}
+
+</script>
 
 </body>
-
 </html>
